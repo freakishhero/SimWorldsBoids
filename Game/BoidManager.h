@@ -16,6 +16,8 @@ public:
 	virtual void Tick(GameData* _GD) override;
 	virtual void Draw(DrawData* _DD) override;
 
+	Vector3 Cohesion(Boid* _boid);
+
 	std::vector<Boid*> getBoids() { return m_Boids;  }
 private:
 	std::vector<Boid*> m_Boids;

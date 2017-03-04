@@ -35,7 +35,7 @@
     <MeshContentTask Include="Vase\JEMINA vase -up.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
-    <MeshContentTask Include="Spear\Lanca_model_m.fbx">
+    <MeshContentTask Include="Duck\duck_autodesk2010.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
   </ItemGroup>

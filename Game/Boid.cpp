@@ -13,18 +13,19 @@ void Boid::Spawn(Vector3 _pos)
 {
 	m_alive = true;
 	m_pos = _pos;
+	m_target_location = Vector3::Zero;
+	m_direction = m_target_location - m_pos;
+	m_direction.Normalize();
 }
 
 void Boid::Tick(GameData * _GD)
 {
 	if (m_alive)
 	{
-		m_pos += Vector3::Forward;
-
-		//Matrix scaleMat = Matrix::CreateScale(m_scale);
-		//Matrix rotTransMat = Matrix::CreateWorld(m_pos, Vector3::Forward, Vector3::Up);
-		//m_worldMat = m_fudge * scaleMat * rotTransMat;
-		CMOGO::Tick(_GD);
+		Matrix scaleMat = Matrix::CreateScale(m_scale);
+		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_direction, Vector3::Up);
+		m_worldMat = m_fudge *scaleMat * rotTransMat;
+		//CMOGO::Tick(_GD);
 	}
 }
 

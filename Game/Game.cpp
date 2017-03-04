@@ -171,11 +171,11 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	text->SetColour(Color((float*)&Colors::Yellow));
 	m_GameObject2Ds.push_back(text);
 
-	BoidManager* pBoidManager = new BoidManager(10, "Lanca_model_m.cmo", _pd3dDevice, m_fxFactory);
+	BoidManager* pBoidManager = new BoidManager(10, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
 	for each (Boid* boid in pBoidManager->getBoids())
 	{
 		//boid->SetPitch(90);
-		boid->SetScale(0.4);
+		boid->SetScale(0.05);
 	}
 	m_GameObjects.push_back(pBoidManager);
 
