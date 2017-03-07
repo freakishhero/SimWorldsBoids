@@ -121,7 +121,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	Box->SetScale(20.0f);
 
 	//L-system like tree
-	m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI/6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
+	//m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI/6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
 
 	VBCube* cube = new VBCube();
 	cube->init(11, _pd3dDevice);
@@ -171,7 +171,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	text->SetColour(Color((float*)&Colors::Yellow));
 	m_GameObject2Ds.push_back(text);
 
-	BoidManager* pBoidManager = new BoidManager(10, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
+	BoidManager* pBoidManager = new BoidManager(20, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
 	for each (Boid* boid in pBoidManager->getBoids())
 	{
 		//boid->SetPitch(90);

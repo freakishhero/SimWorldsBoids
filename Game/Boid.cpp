@@ -25,6 +25,8 @@ void Boid::Tick(GameData * _GD)
 		Matrix scaleMat = Matrix::CreateScale(m_scale);
 		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_direction, Vector3::Up);
 		m_worldMat = m_fudge *scaleMat * rotTransMat;
+		m_acc.x += 5.0f;
+		m_acc.z += 5.0f;
 		//CMOGO::Tick(_GD);
 	}
 }

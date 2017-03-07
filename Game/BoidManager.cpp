@@ -51,8 +51,10 @@ void BoidManager::Tick(GameData * _GD)
 					boid->SetTarget(Cohesion(boid));
 					boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
 					boid->GetDirection().Normalize();
-					boid->addPos(Cohesion(boid));
-					boid->addPos(Separation(boid));
+					boid->SetVelocity((boid->GetVelocity() + Cohesion(boid) + Separation(boid) + Alignment(boid)) / 10);
+					boid->addPos(boid->GetVelocity());
+					//boid->addPos(Cohesion(boid));
+					//boid->addPos(Separation(boid));
 			}
 
 			(boid)->Tick(_GD);
@@ -97,7 +99,7 @@ Vector3 BoidManager::Separation(Boid * _boid)
 	{
 		if (boid != _boid)
 		{
-			if (Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 5.0f)
+			if (Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 15.0f)
 			{
 				_separation -= (boid->GetPos() - _boid->GetPos());
 			}
@@ -113,9 +115,9 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	{
 		if (boid != _boid)
 		{
-			//_alignment += boid->GetVelocity();
+			_alignment += boid->GetVelocity();
 		}
 	}
 	_alignment /= (m_Boids.size() - 1);
-	return _alignment;
+	return (_alignment - _boid->GetVelocity()) / 8;
 }
