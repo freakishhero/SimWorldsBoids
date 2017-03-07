@@ -24,44 +24,40 @@ BoidManager::~BoidManager()
 void BoidManager::Tick(GameData * _GD)
 {
 	Vector3 forwardMove = Vector3::Forward;
-	Vector3 cohesion;
-
 	float randX = rand() % 80 - 40;
 	float randY = rand() % 80 - 40;
 
-	//if (_GD->m_dt * 0.8 > ((float)rand() / (float)RAND_MAX))
-	//{
-		for (vector<Boid*>::iterator iter = m_Boids.begin(); iter != m_Boids.end(); iter++)
+	if (_GD->m_dt * 0.8 > ((float)rand() / (float)RAND_MAX))
+	{
+		for (auto& boid : m_Boids)
 		{
-			if (!(*iter)->isAlive())
+			if (!boid->isAlive())
 			{
-				(*iter)->Spawn({ (float)(rand() % 80) - 40, 0, (float)(rand() % 80) - 40 });
+				boid->Spawn({ (float)(rand() % 80) - 40, 0, (float)(rand() % 80) - 40 });
 				boidsSpawned++;
 				std::cout << ::endl;
 				break;
 			}
 		}
-	//}
+	}
 
-	for (vector<Boid*>::iterator iter = m_Boids.begin(); iter != m_Boids.end(); iter++)
+	for (auto& boid : m_Boids)
 	{
-		if ((*iter)->isAlive())
+		if (boid->isAlive())
 		{
+			if (boidsSpawned > 1)
+			{		
 
-			if (Vector3::Distance((*iter)->GetTarget(), (*iter)->GetDirection()) < 10.0f)
-			{
-				(*iter)->SetTarget(Cohesion(*iter));
-				cohesion = m_Boids[0]->GetTarget();
-				(*iter)->SetDirection((*iter)->GetTarget() - (*iter)->GetPos());
-				(*iter)->GetDirection().Normalize();
+					boid->SetTarget(Cohesion(boid));
+					boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
+					boid->GetDirection().Normalize();
+					boid->addPos(Cohesion(boid));
+					boid->addPos(Separation(boid));
 			}
-			(*iter)->addPos((*iter)->getSpeed() * _GD->m_dt * (*iter)->GetDirection());
-			(*iter)->Tick(_GD);
+
+			(boid)->Tick(_GD);
 		}
 	}
-	std::cout << cohesion.x << endl;
-	//std::cout << Cohesion().y << endl;
-	std::cout << cohesion.z << endl;
 }
 
 void BoidManager::Draw(DrawData * _DD)
@@ -79,6 +75,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 {
 	Vector3 _cohesion = Vector3::Zero;
 	Vector3 _center_of_mass = Vector3::Zero;
+
 	for (auto& boid : m_Boids)
 	{
 		if (boid != _boid)
@@ -86,8 +83,39 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 			_center_of_mass += boid->GetPos();
 		}
 	}
-	_center_of_mass /= m_Boids.size() - 1;
+	_center_of_mass /= (m_Boids.size() - 1);
 
-	_cohesion = (_center_of_mass - _boid->GetPos()) / 100;
+	_cohesion = (_center_of_mass - _boid->GetPos()) / 300;
+
 	return _cohesion;
+}
+
+Vector3 BoidManager::Separation(Boid * _boid)
+{
+	Vector3 _separation = Vector3::Zero;
+	for (auto& boid : m_Boids)
+	{
+		if (boid != _boid)
+		{
+			if (Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 5.0f)
+			{
+				_separation -= (boid->GetPos() - _boid->GetPos());
+			}
+		}
+	}
+	return _separation / 100;
+}
+
+Vector3 BoidManager::Alignment(Boid * _boid)
+{
+	Vector3 _alignment;
+	for (auto& boid : m_Boids)
+	{
+		if (boid != _boid)
+		{
+			//_alignment += boid->GetVelocity();
+		}
+	}
+	_alignment /= (m_Boids.size() - 1);
+	return _alignment;
 }

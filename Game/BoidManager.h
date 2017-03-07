@@ -17,6 +17,8 @@ public:
 	virtual void Draw(DrawData* _DD) override;
 
 	Vector3 Cohesion(Boid* _boid);
+	Vector3 Separation(Boid* _boid);
+	Vector3 Alignment(Boid* _boid);
 
 	std::vector<Boid*> getBoids() { return m_Boids;  }
 private:
