@@ -35,7 +35,6 @@ void BoidManager::Tick(GameData * _GD)
 			{
 				boid->Spawn({ (float)(rand() % 80) - 40, 0, (float)(rand() % 80) - 40 });
 				boidsSpawned++;
-				std::cout << ::endl;
 				break;
 			}
 		}
@@ -45,16 +44,21 @@ void BoidManager::Tick(GameData * _GD)
 	{
 		if (boid->isAlive())
 		{
+			//boid->addPos(Vector3::Forward / 10);
+
 			if (boidsSpawned > 1)
 			{		
 
-					boid->SetTarget(Cohesion(boid));
-					boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
-					boid->GetDirection().Normalize();
-					boid->SetVelocity((boid->GetVelocity() + Cohesion(boid) + Separation(boid) + Alignment(boid)) / 10);
-					boid->addPos(boid->GetVelocity());
-					//boid->addPos(Cohesion(boid));
-					//boid->addPos(Separation(boid));
+					//boid->SetTarget(Cohesion(boid));
+					//boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
+					//boid->GetDirection().Normalize();
+					//ApplyRules();
+					//boid->SetVelocity((boid->GetVelocity() + Cohesion(boid) + Separation(boid)));
+					//boid->SetPos(boid->GetPos() + boid->GetVelocity());
+					//GetVelocity());
+					boid->addPos(Cohesion(boid));
+					boid->addPos(Separation(boid));
+					//boid->addPos((Vector3::Forward / 10) * -1);
 			}
 
 			(boid)->Tick(_GD);
@@ -82,7 +86,10 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	{
 		if (boid != _boid)
 		{
-			_center_of_mass += boid->GetPos();
+			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 10.0f))
+			{
+				_center_of_mass += boid->GetPos();
+			}
 		}
 	}
 	_center_of_mass /= (m_Boids.size() - 1);
@@ -99,11 +106,12 @@ Vector3 BoidManager::Separation(Boid * _boid)
 	{
 		if (boid != _boid)
 		{
-			if (Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 15.0f)
+			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 5.0f))
 			{
 				_separation -= (boid->GetPos() - _boid->GetPos());
 			}
 		}
+
 	}
 	return _separation / 100;
 }
@@ -119,5 +127,32 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 		}
 	}
 	_alignment /= (m_Boids.size() - 1);
-	return (_alignment - _boid->GetVelocity()) / 8;
+	return (_alignment - _boid->GetVelocity());
+}
+
+void BoidManager::Limit_Speed(Boid * _boid)
+{
+	float limit = 2.5f;
+
+	if ((fabs(_boid->GetVelocity().x) + fabs(_boid->GetVelocity().y) + fabs(_boid->GetVelocity().z) > limit))
+	{
+		_boid->SetVelocity((_boid->GetVelocity() / (fabs(_boid->GetVelocity().x) + fabs(_boid->GetVelocity().y) + fabs(_boid->GetVelocity().z))) * limit);
+	}
+}
+
+void BoidManager::ApplyRules()
+{
+	Vector3 v1;
+	Vector3 v2;
+	Vector3 v3;
+
+	for (auto& boid : m_Boids)
+	{
+		v1 = Cohesion(boid);
+		v2 = Separation(boid);
+		v3 = Alignment(boid);
+		boid->SetVelocity(boid->GetVelocity() + v1 + v2 + v3);
+		Limit_Speed(boid);
+		boid->addPos(boid->GetPos() + boid->GetVelocity());
+	}
 }

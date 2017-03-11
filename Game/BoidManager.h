@@ -19,6 +19,8 @@ public:
 	Vector3 Cohesion(Boid* _boid);
 	Vector3 Separation(Boid* _boid);
 	Vector3 Alignment(Boid* _boid);
+	void Limit_Speed(Boid* _boid);
+	void ApplyRules();
 
 	std::vector<Boid*> getBoids() { return m_Boids;  }
 private:
