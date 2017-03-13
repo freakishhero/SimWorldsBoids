@@ -33,9 +33,9 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			if (!boid->isAlive())
 			{
-				boid->Spawn({ (float)(rand() % 80) - 40, 0, (float)(rand() % 80) - 40 });
+				boid->Spawn({ (float)(rand() % 80) - 40, (float)(rand() % 20) - 10, (float)(rand() % 80) - 40 });
 				boid->SetVelocity(Vector3::Zero);
-				boidsSpawned++;
+				boids_spawned++;
 				break;
 			}
 		}
@@ -47,10 +47,12 @@ void BoidManager::Tick(GameData * _GD)
 		{
 			//boid->addPos(Vector3::Forward / 10);
 
-			if (boidsSpawned > 1)
+			if (boids_spawned > 1)
 			{		
-
-					ApplyRules();
+				/*boid->SetTarget(ApplyRules());
+				boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
+				boid->GetDirection().Normalize();*/
+				ApplyRules();
 			}
 
 			(boid)->Tick(_GD);
@@ -74,19 +76,28 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 	Vector3 _cohesion = Vector3::Zero;
 	Vector3 _center_of_mass = Vector3::Zero;
 
+	int nearby_boids = 0;
+
 	for (auto& boid : m_Boids)
 	{
-		if (boid != _boid)
+		if (boids_spawned > 1)
 		{
-			//if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 20.0f))
-			//{
-				_center_of_mass += boid->GetPos();
-			//}
+			if (boid != _boid && boid->isAlive())
+			{
+				if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < 20.0f))
+				{
+					_center_of_mass += boid->GetPos();
+					nearby_boids++;
+				}
+			}
 		}
 	}
-	_center_of_mass /= (m_Boids.size() - 1);
 
-	_cohesion = (_center_of_mass - _boid->GetPos());
+	if (nearby_boids > 0)
+	{
+		_center_of_mass /= (nearby_boids);
+		_cohesion = (_center_of_mass - _boid->GetPos());
+	}
 
 	return _cohesion;
 }
@@ -124,7 +135,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 
 Vector3 BoidManager::Bind_Position(Boid * _boid)
 {
-	int Xmin = -100, Xmax = 100, Ymin = - 100, Ymax = 100, Zmin = -50, Zmax = 50;
+	int Xmin = -80, Xmax = 80, Ymin = - 30, Ymax = 30, Zmin = -80, Zmax = 80;
 	Vector3 position;
 
 	if (_boid->GetPos().x < Xmin)

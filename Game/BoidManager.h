@@ -26,5 +26,5 @@ public:
 	std::vector<Boid*> getBoids() { return m_Boids;  }
 private:
 	std::vector<Boid*> m_Boids;
-	int boidsSpawned = 0;
+	int boids_spawned = 0;
 };
