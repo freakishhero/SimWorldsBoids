@@ -23,23 +23,19 @@ BoidManager::~BoidManager()
 
 void BoidManager::Tick(GameData * _GD)
 {
-	Vector3 forwardMove = Vector3::Forward;
-	float randX = rand() % 80 - 40;
-	float randY = rand() % 80 - 40;
-
-	//if (_GD->m_dt * 0.8 > ((float)rand() / (float)RAND_MAX))
-	//{
+	if (_GD->m_dt * 0.8 > ((float)rand() / (float)RAND_MAX))
+	{
 		for (auto& boid : m_Boids)
 		{
 			if (!boid->isAlive())
 			{
-				boid->Spawn({ (float)(rand() % 80) - 40, (float)(rand() % 20) - 10, (float)(rand() % 80) - 40 });
+				boid->Spawn({ (float)(rand() % 80) - 40, 0, (float)(rand() % 80) - 40 });
 				boid->SetVelocity(Vector3::Zero);
 				boids_spawned++;
 				break;
 			}
 		}
-	//}
+	}
 
 	for (auto& boid : m_Boids)
 	{
@@ -52,7 +48,7 @@ void BoidManager::Tick(GameData * _GD)
 				/*boid->SetTarget(ApplyRules());
 				boid->SetDirection((boid)->GetTarget() - (boid)->GetPos());
 				boid->GetDirection().Normalize();*/
-				ApplyRules();
+				ApplyRules(_GD);
 			}
 
 			(boid)->Tick(_GD);
@@ -136,33 +132,36 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 Vector3 BoidManager::Bind_Position(Boid * _boid)
 {
 	int Xmin = -80, Xmax = 80, Ymin = - 30, Ymax = 30, Zmin = -80, Zmax = 80;
+	float xBoundary = 10.0f;
+	float yBoundary = 10.0f;
+	float zBoundary = 10.0f;
 	Vector3 position;
 
 	if (_boid->GetPos().x < Xmin)
 	{
-		position.x += 10;
+		position.x += xBoundary;
 	}
 	else if (_boid->GetPos().x > Xmax)
 	{
-		position.x -= 10;
+		position.x -= xBoundary;
 	}
 
 	if (_boid->GetPos().y < Ymin)
 	{
-		position.y += 10;
+		position.y += yBoundary;
 	}
 	else if (_boid->GetPos().y > Ymax)
 	{
-		position.y -= 10;
+		position.y -= yBoundary;
 	}
 
 	if (_boid->GetPos().z < Zmin)
 	{
-		position.z += 10;
+		position.z += zBoundary;
 	}
 	else if (_boid->GetPos().z > Zmax)
 	{
-		position.z -= 10;
+		position.z -= zBoundary;
 	}
 
 	return position;
@@ -170,7 +169,7 @@ Vector3 BoidManager::Bind_Position(Boid * _boid)
 
 void BoidManager::Limit_Speed(Boid * _boid)
 {
-	float limit = 0.1f;
+	float limit = speed_limit;
 
 	if ((fabs(_boid->GetVelocity().x) + fabs(_boid->GetVelocity().y) + fabs(_boid->GetVelocity().z) > limit))
 	{
@@ -178,7 +177,7 @@ void BoidManager::Limit_Speed(Boid * _boid)
 	}
 }
 
-void BoidManager::ApplyRules()
+void BoidManager::ApplyRules(GameData* _GD)
 {
 	Vector3 v1;
 	Vector3 v2;
@@ -187,12 +186,37 @@ void BoidManager::ApplyRules()
 
 	for (auto& boid : m_Boids)
 	{
-		v1 = Cohesion(boid) / 30000;
-		v2 = Separation(boid) / 100;
-		v3 = Alignment(boid) / 25;
-		v3 = Bind_Position(boid);
+		v1 = (Cohesion(boid) / cohesion_modifier) * _GD->m_dt; //30000
+		v2 = (Separation(boid) / separation_modifier) * _GD->m_dt; //100
+		v3 = (Alignment(boid) / alignment_modifier) * _GD->m_dt; //25
+		v4 = Bind_Position(boid);
 		boid->SetVelocity(boid->GetVelocity() + v1 + v2 + v3 + v4);
 		Limit_Speed(boid);
 		boid->addPos(boid->GetVelocity());
 	}
+}
+
+float* BoidManager::get_cohesion_mod()
+{
+	return &cohesion_modifier;
+}
+
+float * BoidManager::get_separation_mod()
+{
+	return &separation_modifier;
+}
+
+float * BoidManager::get_alignment_mod()
+{
+	return &alignment_modifier;
+}
+
+float * BoidManager::get_speed_limit()
+{
+	return &speed_limit;
+}
+
+int* BoidManager::get_boids_spawned()
+{
+	return &boids_spawned;
 }

@@ -12,6 +12,7 @@
 #include "drawdata.h"
 #include "DrawData2D.h"
 #include "BoidManager.h"
+#include <AntTweakBar.h>
 #include "Boid.h"
 
 using namespace DirectX;
@@ -80,6 +81,11 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	UINT width = rc.right - rc.left;
 	UINT height = rc.bottom - rc.top;
 	float AR = (float)width / (float)height;
+
+	TwInit(TW_DIRECT3D11, _pd3dDevice); // for Direct3D 11
+	TwWindowSize(width, height);
+	TwBar *tweakBar;
+	tweakBar = TwNewBar("Boids");
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
@@ -167,8 +173,8 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//m_GameObject2Ds.push_back(logo);
 
 	TextGO2D* text = new TextGO2D("Boids Simulation");
-	text->SetPos(Vector2(1, 1));
-	text->SetColour(Color((float*)&Colors::Yellow));
+	text->SetPos(Vector2(width / 2.5, 1));
+	text->SetColour(Color((float*)&Colors::White));
 	m_GameObject2Ds.push_back(text);
 
 	BoidManager* pBoidManager = new BoidManager(25, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
@@ -178,6 +184,11 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 		boid->SetScale(0.05);
 	}
 	m_GameObjects.push_back(pBoidManager);
+	TwAddVarRO(tweakBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "label = 'Boids Spawned' ");
+	TwAddVarRW(tweakBar, "Cohesion Modifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Cohesion Modifier'");
+	TwAddVarRW(tweakBar, "Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_mod(), "min=1 max=10000 step=0.5 group=Steering_Behaviours label='Separation Modifier'");
+	TwAddVarRW(tweakBar, "Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_mod(), "min=1 max=10000 step=0.5 group=Steering_Behaviours label='Alignment Modifier'");
+	TwAddVarRW(tweakBar, "Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=10 step=0.02 group=Steering_Behaviours label='Speed Limit'");
 
 
 };
@@ -228,7 +239,7 @@ Game::~Game()
 	delete m_fxFactory;
 
 	delete m_DD2D;
-
+	TwTerminate();
 };
 
 bool Game::Tick() 
@@ -243,7 +254,6 @@ bool Game::Tick()
 			return false;
 		}
 	}
-
 	//Poll Keyboard & Mouse
 	ReadInput();
 
@@ -256,7 +266,7 @@ bool Game::Tick()
 	//lock the cursor to the centre of the window
 	RECT window;
 	GetWindowRect(m_hWnd, &window);
-	SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
+	//SetCursorPos((window.left + window.right) >> 1, (window.bottom + window.top) >> 1);
 
 	//calculate frame time-step dt for passing down to game objects
 	DWORD currentTime = GetTickCount();
@@ -338,6 +348,7 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//drawing text screws up the Depth Stencil State, this puts it back again!
 	_pd3dImmediateContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+	TwDraw();
 };
 
 

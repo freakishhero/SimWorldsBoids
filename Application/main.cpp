@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "../Game/Game.h"
+#include <AntTweakBar.h>
 #include <stdio.h>
 
 //=================================================================
@@ -74,6 +75,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
+
+	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
+		return 0; // event has been handled by AntTweakBar
 
 	switch (message)
 	{

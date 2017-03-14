@@ -3,6 +3,9 @@
 Boid::Boid(string _fileName, ID3D11Device * _pd3dDevice, IEffectFactory * _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
 {
 	m_alive = false;
+	//m_fudge = Matrix::CreateRotationY(XM_PIDIV2);
+
+
 }
 
 Boid::~Boid()
@@ -23,8 +26,12 @@ void Boid::Tick(GameData * _GD)
 	if (m_alive)
 	{
 		Matrix scaleMat = Matrix::CreateScale(m_scale);
-		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_direction, Vector3::Up);
+		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_vel, Vector3::Up);
 		m_worldMat = m_fudge *scaleMat * rotTransMat;
+		Matrix  transMat = Matrix::CreateTranslation(m_pos);
+
+		m_worldMat = m_fudge * scaleMat * m_rotMat * transMat;
+
 		m_acc.x += 5.0f;
 		m_acc.z += 5.0f;
 		//CMOGO::Tick(_GD);
