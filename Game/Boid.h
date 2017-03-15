@@ -19,11 +19,21 @@ public:
 	float getSpeed() { return m_speed; }
 	Vector3 GetDirection() { return m_direction;  }
 	Vector3 GetTarget() { return m_target_location; }
+	void setPerching(bool state) { perching = state; };
+	bool isPerching() { return perching; };
 	bool isAlive() { return m_alive; }
+	float getPerchTimer() { return perch_timer; }
+	void setPerchTimer(float time) { perch_timer = time; }
+	bool isPredator() { return predator; }
+	void setPredator() { predator = true;  }
 
 private:
 	bool m_alive;
 	float m_speed = 0.1;
+	bool perching = false;
+	float perch_timer = 0.0f;
 	Vector3 m_direction;
+	Vector3 m_up;
 	Vector3 m_target_location;
+	bool predator = false;
 };

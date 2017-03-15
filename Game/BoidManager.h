@@ -3,9 +3,8 @@
 #include <string>
 #include "GameData.h"
 #include "gameobject.h"
+#include "Boid.h"
 #include "Model.h"
-
-class Boid;
 
 class BoidManager : public GameObject
 {
@@ -20,11 +19,15 @@ public:
 	Vector3 Separation(Boid* _boid);
 	Vector3 Alignment(Boid* _boid);
 	Vector3 Bind_Position(Boid* _boid);
+	Vector3 To_Location(Boid* _boid);
 	void Limit_Speed(Boid* _boid);
 	void ApplyRules(GameData* _GD);
+	Boid* getBoid(int _index) { return m_Boids[_index]; }
 	float* get_cohesion_mod();
 	float* get_separation_mod();
 	float* get_alignment_mod();
+	float* get_cohesion_radius();
+	float* get_separation_radius();
 	float* get_speed_limit();
 	int* get_boids_spawned();
 
@@ -32,8 +35,10 @@ public:
 private:
 	std::vector<Boid*> m_Boids;
 	int boids_spawned = 0;
-	float cohesion_modifier = 800.0f;
-	float separation_modifier = 25.0f;
+	float cohesion_modifier = 15000.0f;
+	float separation_modifier = 200.0f;
 	float alignment_modifier = 22.5f;
+	float cohesion_radius = 12.5f;
+	float separation_radius = 3.5;
 	float speed_limit = 0.04;
 };

@@ -3,9 +3,8 @@
 Boid::Boid(string _fileName, ID3D11Device * _pd3dDevice, IEffectFactory * _EF) : CMOGO(_fileName, _pd3dDevice, _EF)
 {
 	m_alive = false;
-	//m_fudge = Matrix::CreateRotationY(XM_PIDIV2);
-
-
+	m_fudge = Matrix::CreateRotationY(XM_PIDIV4);//gives local rotation
+	m_up = Vector3::Transform(Vector3::Up, m_fudge.Invert() * m_worldMat) - m_pos;
 }
 
 Boid::~Boid()
@@ -16,9 +15,6 @@ void Boid::Spawn(Vector3 _pos)
 {
 	m_alive = true;
 	m_pos = _pos;
-	m_target_location = Vector3::Zero;
-	m_direction = m_target_location - m_pos;
-	m_direction.Normalize();
 }
 
 void Boid::Tick(GameData * _GD)
@@ -26,15 +22,13 @@ void Boid::Tick(GameData * _GD)
 	if (m_alive)
 	{
 		Matrix scaleMat = Matrix::CreateScale(m_scale);
-		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_vel, Vector3::Up);
-		m_worldMat = m_fudge *scaleMat * rotTransMat;
-		Matrix  transMat = Matrix::CreateTranslation(m_pos);
+		Matrix rotTransMat = Matrix::CreateWorld(m_pos, m_vel, m_up);
+		Matrix transMat = Matrix::CreateTranslation(m_pos);
+		m_worldMat = m_fudge * scaleMat * rotTransMat * transMat;
 
-		m_worldMat = m_fudge * scaleMat * m_rotMat * transMat;
-
-		m_acc.x += 5.0f;
-		m_acc.z += 5.0f;
-		//CMOGO::Tick(_GD);
+		//m_acc.x = 1.0f;
+		//m_acc.y = 1.0f;
+		//m_acc.z = 1.0f;
 	}
 }
 

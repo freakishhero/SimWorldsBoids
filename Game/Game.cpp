@@ -13,6 +13,7 @@
 #include "DrawData2D.h"
 #include "BoidManager.h"
 #include <AntTweakBar.h>
+#include <iostream>
 #include "Boid.h"
 
 using namespace DirectX;
@@ -98,6 +99,8 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//add Player
 	Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
+	pPlayer->SetPos(Vector3(500, 50, 500));
+	pPlayer->SetYaw(145);
 	m_GameObjects.push_back(pPlayer);
 
 	//add a secondary camera
@@ -112,59 +115,59 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_DD->m_light = m_light;
 
 	//add random content to show the various what you've got here
-	Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
-	m_GameObjects.push_back(terrain);
+	//Terrain* terrain = new Terrain("table.cmo", _pd3dDevice, m_fxFactory, Vector3(100.0f, 0.0f, 100.0f), 0.0f, 0.0f, 0.0f, 0.25f * Vector3::One);
+	//m_GameObjects.push_back(terrain);
 
 	//add some stuff to show off
 
 	/*FileVBGO* terrainBox = new FileVBGO("../Assets/terrainTex.txt", _pd3dDevice);
 	m_GameObjects.push_back(terrainBox);*/
 
-	FileVBGO* Box = new FileVBGO("../Assets/cube.txt", _pd3dDevice);
+	/*FileVBGO* Box = new FileVBGO("../Assets/cube.txt", _pd3dDevice);
 	m_GameObjects.push_back(Box);
 	Box->SetPos(Vector3(0.0f, 0.0f, -100.0f));
 	Box->SetPitch(XM_PIDIV4);
-	Box->SetScale(20.0f);
+	Box->SetScale(20.0f);*/
 
 	//L-system like tree
 	//m_GameObjects.push_back(new Tree(4, 4, .6f, 10.0f *Vector3::Up, XM_PI/6.0f, "JEMINA vase -up.cmo", _pd3dDevice, m_fxFactory));
 
-	VBCube* cube = new VBCube();
-	cube->init(11, _pd3dDevice);
-	cube->SetPos(Vector3(100.0f, 0.0f, 0.0f));
-	cube->SetScale(4.0f);
-	m_GameObjects.push_back(cube);
+	//VBCube* cube = new VBCube();
+	//cube->init(11, _pd3dDevice);
+	//cube->SetPos(Vector3(100.0f, 0.0f, 0.0f));
+	//cube->SetScale(4.0f);
+	//m_GameObjects.push_back(cube);
 
-	VBSpike* spikes = new VBSpike();
-	spikes->init(11, _pd3dDevice);
-	spikes->SetPos(Vector3(0.0f, 0.0f, 100.0f));
-	spikes->SetScale(4.0f);
-	m_GameObjects.push_back(spikes);
+	//VBSpike* spikes = new VBSpike();
+	//spikes->init(11, _pd3dDevice);
+	//spikes->SetPos(Vector3(0.0f, 0.0f, 100.0f));
+	//spikes->SetScale(4.0f);
+	//m_GameObjects.push_back(spikes);
 
-	VBSpiral* spiral = new VBSpiral();
-	spiral->init(11, _pd3dDevice);
-	spiral->SetPos(Vector3(-100.0f, 0.0f, 0.0f));
-	spiral->SetScale(4.0f);
-	m_GameObjects.push_back(spiral);
+	//VBSpiral* spiral = new VBSpiral();
+	//spiral->init(11, _pd3dDevice);
+	//spiral->SetPos(Vector3(-100.0f, 0.0f, 0.0f));
+	//spiral->SetScale(4.0f);
+	//m_GameObjects.push_back(spiral);
 
-	VBPillow* pillow = new VBPillow();
-	pillow->init(11, _pd3dDevice);
-	pillow->SetPos(Vector3(-100.0f, 0.0f, -100.0f));
-	pillow->SetScale(4.0f);
-	m_GameObjects.push_back(pillow);
+	//VBPillow* pillow = new VBPillow();
+	//pillow->init(11, _pd3dDevice);
+	//pillow->SetPos(Vector3(-100.0f, 0.0f, -100.0f));
+	//pillow->SetScale(4.0f);
+	//m_GameObjects.push_back(pillow);
 
-	VBSnail* snail = new VBSnail(_pd3dDevice, "../Assets/baseline.txt", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
-	snail->SetPos(Vector3(-100.0f, 0.0f, 100.0f));
-	snail->SetScale(2.0f);
-	m_GameObjects.push_back(snail);
+	//VBSnail* snail = new VBSnail(_pd3dDevice, "../Assets/baseline.txt", 150, 0.98f, 0.09f * XM_PI, 0.4f, Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
+	//snail->SetPos(Vector3(-100.0f, 0.0f, 100.0f));
+	//snail->SetScale(2.0f);
+	//m_GameObjects.push_back(snail);
 
-	//Marching Cubes
-	VBMarchCubes* VBMC = new VBMarchCubes();
-	VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f,23.0f), 60.0f*Vector3::One, 0.01, _pd3dDevice);
-	VBMC->SetPos(Vector3(100,0,-100));
-	VBMC->SetPitch(-XM_PIDIV2);
-	VBMC->SetScale(Vector3(3, 3, 1.5));
-	m_GameObjects.push_back(VBMC);
+	////Marching Cubes
+	//VBMarchCubes* VBMC = new VBMarchCubes();
+	//VBMC->init(Vector3(-8.0f, -8.0f, -17.0f), Vector3(8.0f, 8.0f,23.0f), 60.0f*Vector3::One, 0.01, _pd3dDevice);
+	//VBMC->SetPos(Vector3(100,0,-100));
+	//VBMC->SetPitch(-XM_PIDIV2);
+	//VBMC->SetScale(Vector3(3, 3, 1.5));
+	//m_GameObjects.push_back(VBMC);
 
 
 	//example basic 2D stuff
@@ -180,17 +183,20 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	BoidManager* pBoidManager = new BoidManager(25, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
 	for each (Boid* boid in pBoidManager->getBoids())
 	{
-		//boid->SetPitch(90);
 		boid->SetScale(0.05);
+		if (pBoidManager->getBoid(24))
+		{
+			boid->setPredator();
+		}
 	}
 	m_GameObjects.push_back(pBoidManager);
 	TwAddVarRO(tweakBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "label = 'Boids Spawned' ");
 	TwAddVarRW(tweakBar, "Cohesion Modifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Cohesion Modifier'");
-	TwAddVarRW(tweakBar, "Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_mod(), "min=1 max=10000 step=0.5 group=Steering_Behaviours label='Separation Modifier'");
-	TwAddVarRW(tweakBar, "Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_mod(), "min=1 max=10000 step=0.5 group=Steering_Behaviours label='Alignment Modifier'");
+	TwAddVarRW(tweakBar, "Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Separation Modifier'");
+	TwAddVarRW(tweakBar, "Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Alignment Modifier'");
 	TwAddVarRW(tweakBar, "Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=10 step=0.02 group=Steering_Behaviours label='Speed Limit'");
-
-
+	TwAddVarRW(tweakBar, "Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_radius(), "min=1 max=100 step=0.5 group=Behaviour_Radii label='Cohesion Radius'");
+	TwAddVarRW(tweakBar, "Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_radius(), "min=0 max=100 step=0.5 group=Behaviour_Radii label='Separation Radius;'");
 };
 
 

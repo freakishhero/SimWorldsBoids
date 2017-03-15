@@ -38,6 +38,9 @@
     <MeshContentTask Include="Duck\duck_autodesk2010.fbx">
       <Filter>Models</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Bird\Boid.FBX">
+      <Filter>Models</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <Text Include="baseline.txt">
