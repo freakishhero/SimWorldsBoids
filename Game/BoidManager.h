@@ -9,7 +9,7 @@
 class BoidManager : public GameObject
 {
 public:
-	BoidManager(int _boidCount, std::string _boidModelName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF);
+	BoidManager(int _boidCount, int _enemyCount, int _size, ID3D11Device* _pd3dDevice);
 	~BoidManager();
 
 	virtual void Tick(GameData* _GD) override;
@@ -23,22 +23,27 @@ public:
 	void Limit_Speed(Boid* _boid);
 	void ApplyRules(GameData* _GD);
 	Boid* getBoid(int _index) { return m_Boids[_index]; }
-	float* get_cohesion_mod();
-	float* get_separation_mod();
-	float* get_alignment_mod();
-	float* get_cohesion_radius();
-	float* get_separation_radius();
+	float* get_cohesion_prey_mod();
+	float* get_separation_prey_mod();
+	float* get_alignment_prey_mod();
+	float* get_cohesion_prey_radius();
+	float* get_separation_prey_radius();
 	float* get_speed_limit();
 	int* get_boids_spawned();
+	int* get_enemy_count();
 
 	std::vector<Boid*> getBoids() { return m_Boids;  }
 private:
 	std::vector<Boid*> m_Boids;
 	int boids_spawned = 0;
-	float cohesion_modifier = 15000.0f;
-	float separation_modifier = 200.0f;
-	float alignment_modifier = 22.5f;
-	float cohesion_radius = 12.5f;
-	float separation_radius = 3.5;
-	float speed_limit = 0.04;
+	float cohesion_prey_modifier = 700.0f;
+	float separation_prey_modifier = 200.0f;
+	float alignment_prey_modifier = 22.5f;
+	float cohesion_predator_modifier = 700.0f;
+	float separation_predator_modifier = 200.0f;
+	float alignment_predator_modifier = 22.5f;
+	float cohesion_prey_radius = 7.5f;
+	float separation_prey_radius = 3.5;
+	float speed_limit = 0.02;
+	int enemy_count = 0;
 };

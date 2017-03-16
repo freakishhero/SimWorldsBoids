@@ -1,11 +1,12 @@
 #pragma once
-#include "CMOGO.h"
+#include "VBGO.h"
+#include "vertex.h"
 #include "GameData.h"
 
-class Boid : public CMOGO
+class Boid : public VBGO
 {
 public:
-	Boid(string _fileName, ID3D11Device* _pd3dDevice, IEffectFactory* _EF);
+	Boid(int _size, ID3D11Device* _pd3dDevice);
 	~Boid();
 
 	void Spawn(Vector3 _pos);
@@ -25,7 +26,7 @@ public:
 	float getPerchTimer() { return perch_timer; }
 	void setPerchTimer(float time) { perch_timer = time; }
 	bool isPredator() { return predator; }
-	void setPredator() { predator = true;  }
+	void setPredator(bool _state) { predator = _state;  }
 
 private:
 	bool m_alive;
@@ -36,4 +37,8 @@ private:
 	Vector3 m_up;
 	Vector3 m_target_location;
 	bool predator = false;
+	virtual void Transform() {};
+	int m_size;
+	myVertex* m_vertices;
+	ID3D11Device* GD;
 };

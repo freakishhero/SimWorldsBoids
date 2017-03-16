@@ -180,23 +180,17 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	text->SetColour(Color((float*)&Colors::White));
 	m_GameObject2Ds.push_back(text);
 
-	BoidManager* pBoidManager = new BoidManager(25, "duck_autodesk2010.cmo", _pd3dDevice, m_fxFactory);
-	for each (Boid* boid in pBoidManager->getBoids())
-	{
-		boid->SetScale(0.05);
-		if (pBoidManager->getBoid(24))
-		{
-			boid->setPredator();
-		}
-	}
+	BoidManager* pBoidManager = new BoidManager(200, 5, 3, _pd3dDevice);
+
 	m_GameObjects.push_back(pBoidManager);
-	TwAddVarRO(tweakBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "label = 'Boids Spawned' ");
-	TwAddVarRW(tweakBar, "Cohesion Modifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Cohesion Modifier'");
-	TwAddVarRW(tweakBar, "Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Separation Modifier'");
-	TwAddVarRW(tweakBar, "Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_mod(), "min=1 max=100000 step=0.5 group=Steering_Behaviours label='Alignment Modifier'");
-	TwAddVarRW(tweakBar, "Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=10 step=0.02 group=Steering_Behaviours label='Speed Limit'");
-	TwAddVarRW(tweakBar, "Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_radius(), "min=1 max=100 step=0.5 group=Behaviour_Radii label='Cohesion Radius'");
-	TwAddVarRW(tweakBar, "Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_radius(), "min=0 max=100 step=0.5 group=Behaviour_Radii label='Separation Radius;'");
+	TwAddVarRO(tweakBar, "Boids Spawned", TW_TYPE_INT8, pBoidManager->get_boids_spawned(), "group=Prey label = 'Boids Spawned' ");
+	TwAddVarRW(tweakBar, "Cohesion Modifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Cohesion Modifier'");
+	TwAddVarRW(tweakBar, "Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Separation Modifier'");
+	TwAddVarRW(tweakBar, "Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Alignment Modifier'");
+	TwAddVarRW(tweakBar, "Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_speed_limit(), "min=0 max=10 step=0.02 group=Prey label='Speed Limit'");
+	TwAddVarRW(tweakBar, "Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_radius(), "min=1 max=100 step=0.5 group=Prey label='Cohesion Radius'");
+	TwAddVarRW(tweakBar, "Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_radius(), "min=0 max=100 step=0.5 group=Prey label='Separation Radius'");
+	TwAddVarRW(tweakBar, "Predator Count", TW_TYPE_FLOAT, pBoidManager->get_enemy_count(), "min=0 max=1000000 step=1 group=Predators label='Predator Count'");
 };
 
 

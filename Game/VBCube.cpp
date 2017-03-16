@@ -8,7 +8,7 @@ void VBCube::init(int _size, ID3D11Device* GD)
 	m_size = _size;
 
 	//calculate number of vertices and primatives
-	int numVerts = 6 * 6 * (m_size - 1) * (m_size - 1);
+	int numVerts = 3 * 3 * (m_size - 1) * (m_size - 1);
 	m_numPrims = numVerts / 3;
 	m_vertices = new myVertex[numVerts];
 	WORD* indices = new WORD[numVerts];
