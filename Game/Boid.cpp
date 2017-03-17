@@ -4,30 +4,31 @@
 Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 {
 	m_alive = false;
+	m_predator = false;
+	SetVelocity(Vector3::Zero);
 	m_fudge = Matrix::CreateRotationY(XM_PIDIV2);//gives local rotation
 	m_up = Vector3::Transform(Vector3::Up, m_fudge.Invert() * m_worldMat) - m_pos;
-	GD = _pd3dDevice;
-	m_size = _size;
 
 	//calculate number of vertices and primatives
+	m_size = _size;
 	int numVerts = 12;
 	m_numPrims = numVerts / 3;
 	m_vertices = new myVertex[numVerts];
 	WORD* indices = new WORD[numVerts];
 
 	//as using the standard VB shader set the tex-coords somewhere safe
-	for (int i = 0; i<numVerts; i++)
+	for (int i = 0; i < numVerts; i++)
 	{
 		indices[i] = i;
 		m_vertices[i].texCoord = Vector2::One;
 	}
 
 	//top
-	m_vertices[0].Color = Color(1.0f, 1.0f, 0.0f, 1.0f);
+	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
 	m_vertices[0].Pos = Vector3(0.0f, 0.0f, 0.0f);
-	m_vertices[1].Color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
 	m_vertices[1].Pos = Vector3(0.0f, 0.0f, 2.0f);
-	m_vertices[2].Color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
 	m_vertices[2].Pos = Vector3(2.0f, -0.5f, 1.0f);
 
 	//back
@@ -46,7 +47,7 @@ Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	m_vertices[8].Pos = Vector3(2.0f, -0.5f, 1.0f);
 
-			//left
+	//left
 	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	m_vertices[9].Pos = Vector3(0.0f, 0.0f, 0.0f);
 	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
@@ -77,8 +78,8 @@ Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 	}
 
 
-	BuildIB(GD, indices);
-	BuildVB(GD, numVerts, m_vertices);
+	BuildIB(_pd3dDevice, indices);
+	BuildVB(_pd3dDevice, numVerts, m_vertices);
 
 	delete[] indices;    //this is no longer needed as this is now in the index Buffer
 	delete[] m_vertices; //this is no longer needed as this is now in the Vertex Buffer

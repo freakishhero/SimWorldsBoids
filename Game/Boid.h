@@ -13,30 +13,26 @@ public:
 
 	virtual void Tick(GameData* _GD) override;
 	virtual void Draw(DrawData* _DD) override;
-
-	void SetDirection(Vector3 _direction) { m_direction = _direction; }
-	void SetTarget(Vector3 _target_locaiton) { m_target_location = _target_locaiton; }
 	
 	float getSpeed() { return m_speed; }
-	Vector3 GetDirection() { return m_direction;  }
-	Vector3 GetTarget() { return m_target_location; }
-	void setPerching(bool state) { perching = state; };
-	bool isPerching() { return perching; };
+	void setPerching(bool state) { m_perching = state; };
+	bool isPerching() { return m_perching; };
 	bool isAlive() { return m_alive; }
-	float getPerchTimer() { return perch_timer; }
-	void setPerchTimer(float time) { perch_timer = time; }
-	bool isPredator() { return predator; }
-	void setPredator(bool _state) { predator = _state;  }
+	float getPerchTimer() { return m_perch_timer; }
+	void setPerchTimer(float time) { m_perch_timer = time; }
+	bool isPredator() { return m_predator; }
+	void setPredator(bool _state) { m_predator = _state;  }
 
 private:
 	bool m_alive;
+	int ID = 0;
 	float m_speed = 0.1;
-	bool perching = false;
-	float perch_timer = 0.0f;
+	bool m_perching = false;
+	float m_perch_timer = 0.0f;
 	Vector3 m_direction;
 	Vector3 m_up;
 	Vector3 m_target_location;
-	bool predator = false;
+	bool m_predator = false;
 	virtual void Transform() {};
 	int m_size;
 	myVertex* m_vertices;
