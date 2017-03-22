@@ -181,7 +181,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObject2Ds.push_back(text);
 
 	//Boid manager creation
-	BoidManager* pBoidManager = new BoidManager(200, 5, 3, _pd3dDevice);
+	BoidManager* pBoidManager = new BoidManager(130, 5, 3, _pd3dDevice);
 	m_GameObjects.push_back(pBoidManager);
 
 
@@ -196,6 +196,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(tweakBar, "Prey Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Alignment Modifier'");
 	TwAddVarRW(tweakBar, "Prey Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_radius(), "min=1 max=100 step=0.5 group=Prey label='Cohesion Radius'");
 	TwAddVarRW(tweakBar, "Prey Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_radius(), "min=0 max=100 step=0.5 group=Prey label='Separation Radius'");
+	TwAddVarRW(tweakBar, "Prey Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_radius(), "min=0 max=100 step=0.5 group=Prey label='Alignment Radius'");
 	TwAddVarRW(tweakBar, "Prey Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_prey_speed_limit(), "min=0 max=10 step=0.02 group=Prey label='Speed Limit'");
 	TwAddVarRW(tweakBar, "Prey Scatter Modifier", TW_TYPE_FLOAT, pBoidManager->get_scatter_mod(), "min=1 max=100000 step=0.5 group=Prey label='Scatter Modifier'");
 	TwAddVarRW(tweakBar, "Prey Scatter Radius", TW_TYPE_FLOAT, pBoidManager->get_scatter_radius(), "min=0 max=100 step=0.5 group=Prey label='Scatter Radius'");
@@ -206,6 +207,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(tweakBar, "Predator Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Alignment Modifier'");
 	TwAddVarRW(tweakBar, "Predator Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_pred_radius(), "min=1 max=100 step=0.5 group=Predators label='Cohesion Radius'");
 	TwAddVarRW(tweakBar, "Predator Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Separation Radius'");
+	TwAddVarRW(tweakBar, "Predator Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Alignment Radius'");
 	TwAddVarRW(tweakBar, "Predator Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_pred_speed_limit(), "min=0 max=10 step=0.02 group=Predators label='Speed Limit'");
 };
 

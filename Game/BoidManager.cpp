@@ -6,7 +6,6 @@ BoidManager::BoidManager(int _boidCount, int _enemyCount, int _size, ID3D11Devic
 {
 	boids_spawned = 0;
 	enemy_count = _enemyCount;
-	//srand(unsigned int(time(NULL)));
 
 	for (int i = 0; i < _boidCount; i++)
 	{
@@ -27,10 +26,10 @@ BoidManager::BoidManager(int _boidCount, int _enemyCount, int _size, ID3D11Devic
 
 BoidManager::~BoidManager()
 {
-	for( auto& boid : m_Boids)
-	{
-		delete boid;
-	}
+	//for( auto& boid : m_Boids)
+	//{
+	//	delete boid;
+	//}
 }
 
 void BoidManager::Tick(GameData * _GD)
@@ -43,16 +42,13 @@ void BoidManager::Tick(GameData * _GD)
 			boids_spawned++;
 			break;
 		}
-	}
 
-	for (auto& boid : m_Boids)
-	{
 		if (boid->isAlive())
 		{
 			//boid->addPos(Vector3::Forward / 10);
 
 			if (boids_spawned > 1)
-			{		
+			{
 				ApplyRules(_GD);
 			}
 
@@ -92,10 +88,17 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 					nearby_boids++;
 				}
 			}
+			if (boid != _boid && boid->isPredator() == true)
+			{
+				if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < cohesion_predator_radius))
+				{
+					_center_of_mass += boid->GetPos();
+				}
+			}
 		}
 	}
 
-	if (!_boid->isPredator())
+	if (_boid->isPredator() == false)
 	{
 		if (nearby_boids > 0)
 		{
@@ -121,6 +124,13 @@ Vector3 BoidManager::Separation(Boid * _boid)
 				_separation -= (boid->GetPos() - _boid->GetPos());
 			}
 		}
+		if (boid != _boid && boid->isPredator() == true)
+		{
+			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < separation_predator_radius))
+			{
+				_separation -= (boid->GetPos() - _boid->GetPos());
+			}
+		}
 
 	}
 	return _separation;
@@ -133,7 +143,17 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	{
 		if (boid != _boid && boid->isPredator() == false)
 		{
-			_alignment += boid->GetVelocity();
+			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < alignment_prey_radius))
+			{
+				_alignment += boid->GetVelocity();
+			}
+		}
+		if (boid != _boid && boid->isPredator() == true)
+		{
+			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < alignment_predator_radius))
+			{
+				_alignment += boid->GetVelocity();
+			}
 		}
 	}
 	_alignment /= (m_Boids.size() - 1);
@@ -193,13 +213,6 @@ Vector3 BoidManager::Scatter(Boid * _boid)
 
 	}
 	return _scatter;
-}
-
-Vector3 BoidManager::To_Location(Boid * _boid)
-{
-	Vector3 location = m_Boids[24]->GetPos();
-
-	return (location - _boid->GetPos()) / 100;
 }
 
 void BoidManager::Limit_Speed(Boid * _boid)
@@ -282,6 +295,11 @@ float * BoidManager::get_separation_prey_radius()
 	return &separation_prey_radius;
 }
 
+float * BoidManager::get_alignment_prey_radius()
+{
+	return &alignment_prey_radius;
+}
+
 float * BoidManager::get_scatter_radius()
 {
 	return &scatter_radius;
@@ -315,6 +333,11 @@ float * BoidManager::get_cohesion_pred_radius()
 float * BoidManager::get_separation_pred_radius()
 {
 	return &separation_predator_radius;
+}
+
+float * BoidManager::get_alignment_pred_radius()
+{
+	return &alignment_predator_radius;
 }
 
 float * BoidManager::get_pred_speed_limit()

@@ -106,9 +106,9 @@ void Boid::Tick(GameData * _GD)
 		Matrix transMat = Matrix::CreateTranslation(m_pos);
 		m_worldMat = m_fudge * scaleMat * rotTransMat * transMat;
 
-		//m_acc.x = 1.0f;
-		//m_acc.y = 1.0f;
-		//m_acc.z = 1.0f;
+		m_acc.x = 1.0f;
+		m_acc.y = 1.0f;
+		m_acc.z = 1.0f;
 	}
 }
 
