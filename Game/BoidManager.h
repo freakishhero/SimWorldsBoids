@@ -20,9 +20,8 @@ public:
 	Vector3 Alignment(Boid* _boid);
 	Vector3 Bind_Position(Boid* _boid);
 	Vector3 Scatter(Boid* _boid);
-	Vector3 To_Location(Boid* _boid);
 	void Limit_Speed(Boid* _boid);
-	void ApplyRules(GameData* _GD);
+	void ApplyRules(GameData* _GD, Boid* _boid);
 	Boid* getBoid(int _index) { return m_Boids[_index]; }
 	float* get_cohesion_prey_mod();
 	float* get_separation_prey_mod();
@@ -48,15 +47,15 @@ public:
 private:
 	std::vector<Boid*> m_Boids;
 	int boids_spawned = 0;
-	float cohesion_prey_modifier = 700.0f;
-	float separation_prey_modifier = 200.0f;
-	float scatter_modifier = 800.0f;
-	float alignment_prey_modifier = 22.5f;
-	float cohesion_prey_radius = 7.5f;
-	float alignment_prey_radius = 7.5f;
-	float separation_prey_radius = 3.5;
-	float scatter_radius = 25.0f;
-	float prey_speed_limit = 0.02;
+	float cohesion_prey_modifier = 20.0f;
+	float separation_prey_modifier = 20.0f;
+	float scatter_modifier = 10.0f;
+	float alignment_prey_modifier = 10.0f;
+	float cohesion_prey_radius = 30.0f;
+	float alignment_prey_radius = 20.0f;
+	float separation_prey_radius = 10.0f;
+	float scatter_radius = 60.0f;
+	float prey_speed_limit = 10;
 
 	float cohesion_predator_modifier = 7.0f;
 	float separation_predator_modifier = 2.0f;
@@ -64,7 +63,7 @@ private:
 	float alignment_predator_radius = 70.0f;
 	float cohesion_predator_radius = 1.0f;
 	float separation_predator_radius = 1.0f;
-	float predator_speed_limit = 0.02;
+	float predator_speed_limit = 10;
 
 	int enemy_count = 0;
 };

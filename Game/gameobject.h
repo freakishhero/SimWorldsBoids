@@ -29,6 +29,7 @@ public:
 	Vector3		GetPos() { return m_pos; }
 	Vector3		GetScale() { return m_scale; }
 	Vector3		GetVelocity() { return m_vel; }
+	Vector3		GetAcceleration() { return m_acc; }
 
 
 	float		GetPitch() { return m_pitch; }
@@ -46,6 +47,7 @@ public:
 	void		SetScale(float _x, float _y, float _z) { m_scale = Vector3(_x, _y, _z); }
 	void		SetScale(Vector3 _scale) { m_scale = _scale; }
 	void		SetVelocity(Vector3 _velocity) { m_vel = _velocity;  }
+	void		SetAcceleration(Vector3 _acc) { m_acc = _acc; }
 
 	void		SetPitch(float _pitch) { m_pitch = _pitch; }
 	void		SetYaw(float _yaw) { m_yaw = _yaw; }
