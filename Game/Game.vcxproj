@@ -123,6 +123,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Boid.h" />
+    <ClInclude Include="BoidData.h" />
     <ClInclude Include="BoidManager.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CMOGO.h" />

@@ -12,7 +12,7 @@
 #include "CommonStates.h"
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
-#include "Audio.h"
+//#include "Audio.h"
 
 using std::list;
 using std::unique_ptr;
@@ -68,7 +68,7 @@ protected:
 	DrawData2D * m_DD2D;	//Data to be passed by game to all 2D Game Objects via Draw 
 
 	//sound stuff
-	std::unique_ptr<AudioEngine> m_audioEngine;
+	//std::unique_ptr<AudioEngine> m_audioEngine;
 
 	//Tick functions for each state
 	void PlayTick();

@@ -2,6 +2,7 @@
 #include "VBGO.h"
 #include "vertex.h"
 #include "GameData.h"
+#include "BoidData.h"
 
 class Boid : public VBGO
 {
@@ -20,8 +21,9 @@ public:
 	bool isAlive() { return m_alive; }
 	float getPerchTimer() { return m_perch_timer; }
 	void setPerchTimer(float time) { m_perch_timer = time; }
-	bool isPredator() { return m_predator; }
-	void setPredator(bool _state) { m_predator = _state;  }
+	BoidType getBoidType() { return m_boid_type; }
+	void setBoidType(BoidType _type) { m_boid_type = _type; }
+	bool isPredator();
 
 private:
 	bool m_alive;
@@ -32,9 +34,9 @@ private:
 	Vector3 m_direction;
 	Vector3 m_up;
 	Vector3 m_target_location;
-	bool m_predator = false;
 	virtual void Transform() {};
 	int m_size;
 	myVertex* m_vertices;
 	ID3D11Device* GD;
+	BoidType m_boid_type = BoidType::PREY;
 };

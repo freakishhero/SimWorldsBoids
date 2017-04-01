@@ -22,12 +22,12 @@ using namespace DirectX::SimpleMath;
 Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance) 
 {
 	//set up audio
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
-#ifdef _DEBUG
-	eflags = eflags | AudioEngine_Debug;
-#endif
-	m_audioEngine.reset(new AudioEngine(eflags));
+//	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+//	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+//#ifdef _DEBUG
+//	eflags = eflags | AudioEngine_Debug;
+//#endif
+//	m_audioEngine.reset(new AudioEngine(eflags));
 
 	//Create DirectXTK spritebatch stuff
 	ID3D11DeviceContext* pd3dImmediateContext;
@@ -180,8 +180,9 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	text->SetColour(Color((float*)&Colors::White));
 	m_GameObject2Ds.push_back(text);
 
-	//Boid manager creation
-	BoidManager* pBoidManager = new BoidManager(1000, 5, 3, _pd3dDevice);
+	/* Boid Manager Creation: Number of boids, number of predators,
+	   number of alpha predators, number of objects, VBO size*/
+	BoidManager* pBoidManager = new BoidManager(500, 5, 1, 2, 3, _pd3dDevice);
 	m_GameObjects.push_back(pBoidManager);
 
 
@@ -263,15 +264,15 @@ Game::~Game()
 bool Game::Tick() 
 {
 	//tick audio engine
-	if (!m_audioEngine->Update())
-	{
-		// No audio device is active
-		if (m_audioEngine->IsCriticalError())
-		{
-			//something has gone wrong with audio so QUIT!
-			return false;
-		}
-	}
+	//if (!m_audioEngine->Update())
+	//{
+	//	// No audio device is active
+	//	if (m_audioEngine->IsCriticalError())
+	//	{
+	//		//something has gone wrong with audio so QUIT!
+	//		return false;
+	//	}
+	//}
 	//Poll Keyboard & Mouse
 	ReadInput();
 

@@ -4,7 +4,7 @@
 Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 {
 	m_alive = false;
-	m_predator = false;
+	m_boid_type = BoidType::PREY;
 	SetVelocity(Vector3::Zero);
 	m_fudge = Matrix::CreateRotationY(XM_PIDIV2);//gives local rotation
 	m_up = Vector3::Transform(Vector3::Up, m_fudge.Invert() * m_worldMat) - m_pos;
@@ -22,37 +22,50 @@ Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 		indices[i] = i;
 		m_vertices[i].texCoord = Vector2::One;
 	}
+	Color boid_color;
+	switch (m_boid_type)
+	{
+	case BoidType::PREY:
+		boid_color = Color(0.1f, 0.1f, 0.1f, 9.0f);
+		break;
+	case BoidType::PREDATOR:
+		boid_color = Color(0.45f, 0.45f, 0.45f, 5.0f);
+		break;
+	case BoidType::ALPHA_PREDATOR:
+		boid_color = Color(0.9f, 0.9f, 0.9f, 2.0f);
+		break;
+	}
 
 	//top
-	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
+	m_vertices[0].Color = boid_color;
 	m_vertices[0].Pos = Vector3(0.0f, 0.0f, 0.0f);
-	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
+	m_vertices[0].Color = boid_color;
 	m_vertices[1].Pos = Vector3(0.0f, 0.0f, 2.0f);
-	m_vertices[0].Color = Color(0.1f, 0.1f, 0.1f, 1.0f);
+	m_vertices[0].Color = boid_color;
 	m_vertices[2].Pos = Vector3(2.0f, -0.5f, 1.0f);
 
 	//back
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[3].Pos = Vector3(0.0f, 0.0f, 0.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[4].Pos = Vector3(0.0f, 0.0f, 2.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[5].Pos = Vector3(0.0f, -1.0f, 1.0f);
 
 	//right
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[6].Pos = Vector3(0.0f, 0.0f, 2.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[7].Pos = Vector3(0.0f, -1.0f, 1.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[8].Pos = Vector3(2.0f, -0.5f, 1.0f);
 
 	//left
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[9].Pos = Vector3(0.0f, 0.0f, 0.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[10].Pos = Vector3(0.0f, -1.0f, 1.0f);
-	m_vertices[2].Color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+	m_vertices[2].Color = boid_color;
 	m_vertices[11].Pos = Vector3(2.0f, -0.5f, 1.0f);
 
 	//carry out some kind of transform on these vertices to make this object more interesting
@@ -114,5 +127,19 @@ void Boid::Draw(DrawData * _DD)
 	if (m_alive)
 	{
 		VBGO::Draw(_DD);
+	}
+}
+
+bool Boid::isPredator()
+{
+	switch (m_boid_type)
+	{
+	case BoidType::PREY:
+	case BoidType::LEADER:
+	case BoidType::OBJECT:
+		return false;
+	case BoidType::ALPHA_PREDATOR:
+	case BoidType::PREDATOR:
+		return true;
 	}
 }
