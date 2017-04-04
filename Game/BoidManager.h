@@ -56,7 +56,7 @@ private:
 	float alignment_prey_modifier = 5.0f;
 	float cohesion_prey_radius = 10.0f;
 	float alignment_prey_radius = 10.0f;
-	float separation_prey_radius = 10.0f;
+	float separation_prey_radius = 5.0f;
 	float scatter_radius = 30.0f;
 	float prey_speed_limit = 30;
 

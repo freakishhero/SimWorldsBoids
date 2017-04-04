@@ -90,10 +90,10 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 100.0f, 100.0f));
+	m_cam->SetPos(Vector3(0.0f, 100.0f, 200.0f));
 	m_GameObjects.push_back(m_cam);
 
-	//create a base light
+//	create a base light
 	m_light = new Light(Vector3(0.0f, 100.0f, 160.0f), Color(1.0f, 1.0f, 1.0f, 1.0f), Color(0.4f, 0.1f, 0.1f, 1.0f));
 	m_GameObjects.push_back(m_light);
 
@@ -313,17 +313,17 @@ bool Game::Tick()
 void Game::PlayTick()
 {
 	//upon space bar switch camera state
-	if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
-	{
-		if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
-		{
-			m_GD->m_GS = GS_PLAY_TPS_CAM;
-		}
-		else
-		{
-			m_GD->m_GS = GS_PLAY_MAIN_CAM;
-		}
-	}
+	//if ((m_keyboardState[DIK_SPACE] & 0x80) && !(m_prevKeyboardState[DIK_SPACE] & 0x80))
+	//{
+	//	if (m_GD->m_GS == GS_PLAY_MAIN_CAM)
+	//	{
+	//		m_GD->m_GS = GS_PLAY_TPS_CAM;
+	//	}
+	//	else
+	//	{
+	//		m_GD->m_GS = GS_PLAY_MAIN_CAM;
+	//	}
+	//}
 
 	//update all objects
 	for (list<GameObject *>::iterator it = m_GameObjects.begin(); it != m_GameObjects.end(); it++)

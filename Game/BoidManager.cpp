@@ -110,7 +110,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 					}
 				}
 
-				if (boid != _boid && boid->isPredator() == true)
+				/*if (boid != _boid && boid->isPredator() == true)
 				{
 					if (boid->getBoidType() == BoidType::PREDATOR)
 					{
@@ -120,27 +120,26 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 							nearby_boids++;
 						}
 					}
-				}
+				}*/
 			}
 		}
 	}
 
-	if (_boid->isPredator() == false && _boid->getBoidType() != BoidType::OBJECT)
-	{
+	/*if (_boid->isPredator() == false && _boid->getBoidType() != BoidType::OBJECT)
+	{*/
 		if (nearby_boids > 0)
 		{
 			_center_of_mass /= (nearby_boids);
 			_cohesion = (_center_of_mass - _boid->GetPos());
 		}
-	}
-
+	//}
 	return _cohesion;
 }
 
 Vector3 BoidManager::Separation(Boid * _boid)
 {
 	Vector3 _separation = Vector3::Zero;
-	float radius = 0.0f;
+	//float radius = 0.0f;
 
 	for (auto& boid : m_Boids)
 	{
@@ -158,7 +157,6 @@ Vector3 BoidManager::Separation(Boid * _boid)
 				_separation -= (boid->GetPos() - _boid->GetPos());
 			}
 		}
-
 	}
 	return _separation;
 }
@@ -166,8 +164,6 @@ Vector3 BoidManager::Separation(Boid * _boid)
 Vector3 BoidManager::Alignment(Boid * _boid)
 {
 	Vector3 _alignment;
-
-
 
 	int count = 0;
 	for (auto& boid : m_Boids)
@@ -184,8 +180,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 		{
 			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < alignment_predator_radius))
 			{
-				_alignment += boid->GetVelocity();
-				
+				_alignment += boid->GetVelocity();				
 			}
 		}
 	}
@@ -201,14 +196,12 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 	else
 	{
 		return Vector3::Zero;
-	}
-	
-	
+	}	
 }
 
 Vector3 BoidManager::Bind_Position(Boid * _boid)
 {
-	int Xmin = -80, Xmax = 80, Ymin = - 80, Ymax = 80, Zmin = -80, Zmax = 80;
+	int Xmin = -70, Xmax = 70, Ymin = - 70, Ymax = 70, Zmin = -70, Zmax = 70;
 	Vector3 position;
 
 	if (_boid->GetPos().x < Xmin)
@@ -231,11 +224,11 @@ Vector3 BoidManager::Bind_Position(Boid * _boid)
 
 	if (_boid->GetPos().z < Zmin)
 	{
-		_boid->SetPos(Vector3(_boid->GetPos().x, Zmax, _boid->GetPos().z));
+		_boid->SetPos(Vector3(_boid->GetPos().x, _boid->GetPos().y, Zmax));
 	}
 	else if (_boid->GetPos().z > Zmax)
 	{
-		_boid->SetPos(Vector3(_boid->GetPos().x, Zmin, _boid->GetPos().z));
+		_boid->SetPos(Vector3(_boid->GetPos().x, _boid->GetPos().y, Zmin));
 	}
 	return position;
 }
@@ -252,7 +245,6 @@ Vector3 BoidManager::Scatter(Boid * _boid)
 				_scatter -= (boid->GetPos() - _boid->GetPos());
 			}
 		}
-
 	}
 	return _scatter;
 }
