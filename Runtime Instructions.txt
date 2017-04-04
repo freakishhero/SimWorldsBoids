@@ -1,0 +1,1 @@
+Start the project in "Release" mode for best results.

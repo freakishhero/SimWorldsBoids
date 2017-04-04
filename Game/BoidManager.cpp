@@ -167,8 +167,6 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 {
 	Vector3 _alignment;
 
-
-
 	int count = 0;
 	for (auto& boid : m_Boids)
 	{
@@ -184,8 +182,7 @@ Vector3 BoidManager::Alignment(Boid * _boid)
 		{
 			if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < alignment_predator_radius))
 			{
-				_alignment += boid->GetVelocity();
-				
+				_alignment += boid->GetVelocity();				
 			}
 		}
 	}
@@ -252,7 +249,6 @@ Vector3 BoidManager::Scatter(Boid * _boid)
 				_scatter -= (boid->GetPos() - _boid->GetPos());
 			}
 		}
-
 	}
 	return _scatter;
 }
