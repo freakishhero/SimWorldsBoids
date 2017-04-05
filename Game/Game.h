@@ -88,7 +88,7 @@ protected:
 private:
 
 	float camera_x = 0;
-	float camera_y = 10;
+	float camera_y = 500;
 	float camera_z = 50;
 };
 
