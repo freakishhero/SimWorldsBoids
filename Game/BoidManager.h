@@ -43,32 +43,38 @@ public:
 	float* get_separation_pred_radius();
 	float* get_alignment_pred_radius();
 	float* get_pred_speed_limit();
+	float* setD();
 
 	int* get_boids_spawned();
 
 	std::vector<Boid*> getBoids() { return m_Boids;  }
+
+	void set2D(Boid * _boid);
+
 private:
 	std::vector<Boid*> m_Boids;
 	int boids_spawned = 0;
 	float cohesion_prey_modifier = 20.0f;
-	float separation_prey_modifier = 20.0f;
+	float separation_prey_modifier = 10.0f;
 	float scatter_modifier = 30.0f;
 	float alignment_prey_modifier = 5.0f;
-	float cohesion_prey_radius = 10.0f;
+	float cohesion_prey_radius = 30.0f;
 	float alignment_prey_radius = 10.0f;
 	float separation_prey_radius = 5.0f;
-	float scatter_radius = 30.0f;
-	float prey_speed_limit = 30;
+	float scatter_radius = 35.0f;
+	float prey_speed_limit = 20;
 
 	float cohesion_predator_modifier = 7.0f;
 	float separation_predator_modifier = 2.0f;
-	float alignment_predator_modifier = 1.5f;
+	float alignment_predator_modifier = 10.0f;
 	float alignment_predator_radius = 70.0f;
-	float cohesion_predator_radius = 1.0f;
+	float cohesion_predator_radius = 20.0f;
 	float separation_predator_radius = 30.0f;
-	float predator_speed_limit = 10;
+	float predator_speed_limit = 40;
 
 	int predator_count = 0;
 	int object_count = 0;
 	int alpha_predator_count = 0;
+
+	float D = 1;
 };

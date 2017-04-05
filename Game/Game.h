@@ -72,6 +72,24 @@ protected:
 
 	//Tick functions for each state
 	void PlayTick();
+
+	float * get_camera_x();
+	float getcamerax() { return camera_x; }
+	void setcamerax(float _camerax) { camera_x = _camerax; }
+
+	float * get_camera_y();
+	float getcameray() { return camera_y; }
+	void setcameray(float _cameray) { camera_y = _cameray; }
+
+	float * get_camera_z();
+	float getcameraz() { return camera_z; }
+	void setcameraz(float _cameraz) { camera_z = _cameraz; }
+
+private:
+
+	float camera_x = 0;
+	float camera_y = 10;
+	float camera_z = 50;
 };
 
 

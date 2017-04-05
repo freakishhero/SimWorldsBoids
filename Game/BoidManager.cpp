@@ -25,7 +25,7 @@ BoidManager::BoidManager(int _boid_count, int _predator_count,
 		predator_count = (_boid_count / 90) + 1;
 	}
 
-
+	
 	for (int i = 0; i < predator_count; i++)
 	{
 		m_Boids[i]->setBoidType(BoidType::PREDATOR);
@@ -101,7 +101,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 		{
 			if (_boid->getBoidType() != BoidType::OBJECT)
 			{
-				if (boid != _boid && boid->getBoidType() == BoidType::PREY)
+				if (boid != _boid && boid->getBoidType() != BoidType::PREDATOR)
 				{
 					if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < cohesion_prey_radius))
 					{
@@ -114,7 +114,7 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 				{
 					if (boid->getBoidType() == BoidType::PREDATOR)
 					{
-						if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < cohesion_prey_radius))
+						if (fabs(Vector3::Distance(boid->GetPos(), _boid->GetPos()) < cohesion_predator_radius))
 						{
 							_center_of_mass += boid->GetPos();
 							nearby_boids++;
@@ -125,8 +125,8 @@ Vector3 BoidManager::Cohesion(Boid* _boid)
 		}
 	}
 
-	/*if (_boid->isPredator() == false && _boid->getBoidType() != BoidType::OBJECT)
-	{*/
+	//if (_boid->isPredator() == false && _boid->getBoidType() != BoidType::OBJECT)
+	//{
 		if (nearby_boids > 0)
 		{
 			_center_of_mass /= (nearby_boids);
@@ -279,7 +279,7 @@ void BoidManager::ApplyRules(GameData* _GD, Boid* _boid)
 	switch (_boid->getBoidType())
 	{
 	case BoidType::PREY:
-		cohesion_rule = (Cohesion(_boid) / cohesion_prey_modifier);
+		cohesion_rule = (Cohesion(_boid)  / cohesion_prey_modifier);
 		separation_rule = (Separation(_boid) / separation_prey_modifier);
 		allignment_rule = (Alignment(_boid) / alignment_prey_modifier);
 		scatter_rule = (Scatter(_boid) / scatter_modifier);
@@ -289,7 +289,7 @@ void BoidManager::ApplyRules(GameData* _GD, Boid* _boid)
 		cohesion_rule = (Cohesion(_boid) / cohesion_predator_modifier);
 		separation_rule = (Separation(_boid) / separation_predator_modifier);
 		allignment_rule = (Alignment(_boid) / alignment_predator_modifier);
-		_boid->SetAcceleration(_boid->GetAcceleration() + cohesion_rule + separation_rule + allignment_rule + bind_position_rule);
+		_boid->SetAcceleration((_boid->GetAcceleration() + cohesion_rule + separation_rule + allignment_rule + bind_position_rule));
 		break;
 	case BoidType::ALPHA_PREDATOR:
 		cohesion_rule = (Cohesion(_boid) / cohesion_predator_modifier);
@@ -309,6 +309,10 @@ void BoidManager::ApplyRules(GameData* _GD, Boid* _boid)
 		break;
 	}
 	bind_position_rule = Bind_Position(_boid);
+
+	set2D(_boid);
+
+
 	Limit_Speed(_boid);
 	_boid->SetVelocity(_boid->GetVelocity() + _boid->GetAcceleration());
 	_boid->SetAcceleration(Vector3::Zero);
@@ -395,7 +399,21 @@ float * BoidManager::get_pred_speed_limit()
 	return &predator_speed_limit;
 }
 
+float * BoidManager::setD()
+{
+
+	return &D;
+}
+
 int* BoidManager::get_boids_spawned()
 {
 	return &boids_spawned;
+}
+
+void BoidManager::set2D(Boid * _boid)
+{
+	if (D == 0)
+	{
+		_boid->SetPos(Vector3(_boid->GetPos().x, 0, _boid->GetPos().z));
+	}	
 }

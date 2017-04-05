@@ -90,7 +90,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	//create a base camera
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
-	m_cam->SetPos(Vector3(0.0f, 100.0f, 200.0f));
+	m_cam->SetPos(Vector3(getcamerax(), getcameray(), getcameraz()));
 	m_GameObjects.push_back(m_cam);
 
 //	create a base light
@@ -98,14 +98,14 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	m_GameObjects.push_back(m_light);
 
 	//add Player
-	Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
-	pPlayer->SetPos(Vector3(500, 50, 500));
-	pPlayer->SetYaw(145);
-	m_GameObjects.push_back(pPlayer);
+	//Player* pPlayer = new Player("BirdModelV1.cmo", _pd3dDevice, m_fxFactory);
+	//pPlayer->SetPos(Vector3(500, 50, 500));
+	//pPlayer->SetYaw(145);
+	//m_GameObjects.push_back(pPlayer);
 
 	//add a secondary camera
-	m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(0.0f, 10.0f, 50.0f));
-	m_GameObjects.push_back(m_TPScam);
+	//m_TPScam = new TPSCamera(0.25f * XM_PI, AR, 1.0f, 10000.0f, pPlayer, Vector3::UnitY, Vector3(getcamerax(), getcameray(), getcameraz()));
+	//m_GameObjects.push_back(m_TPScam);
 
 	//create DrawData struct and populate its pointers
 	m_DD = new DrawData;
@@ -205,11 +205,17 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	//predator tweaks
 	TwAddVarRW(tweakBar, "Predator Cohesion aModifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Cohesion Modifier'");
 	TwAddVarRW(tweakBar, "Predator Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Separation Modifier'");
-	TwAddVarRW(tweakBar, "Predator Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Alignment Modifier'");
+	TwAddVarRW(tweakBar, "Predator Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_mod(), "min=0 max=100000 step=0.1 group=Predators label='Alignment Modifier'");
 	TwAddVarRW(tweakBar, "Predator Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_pred_radius(), "min=1 max=100 step=0.5 group=Predators label='Cohesion Radius'");
 	TwAddVarRW(tweakBar, "Predator Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Separation Radius'");
 	TwAddVarRW(tweakBar, "Predator Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Alignment Radius'");
 	TwAddVarRW(tweakBar, "Predator Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_pred_speed_limit(), "min=0 max=100 step=1 group=Predators label='Speed Limit'");
+
+	TwAddVarRW(tweakBar, "Dimension", TW_TYPE_FLOAT, pBoidManager->setD(), "min=0 max=1 step=1 group=Dimensions label='setd'");
+
+	TwAddVarRW(tweakBar, "CameraVariablex", TW_TYPE_FLOAT, get_camera_x(), "min=0 max= 1000 step=10 group=Camerax label='Camera Angle'");
+	TwAddVarRW(tweakBar, "CameraVariabley", TW_TYPE_FLOAT, get_camera_y(), "min=0 max= 1000 step=10 group=Cameray label='Camera Angle'");
+	TwAddVarRW(tweakBar, "CameraVariablez", TW_TYPE_FLOAT, get_camera_z(), "min=0 max= 1000 step=10 group=Cameraz label='Camera Angle'");
 };
 
 
@@ -307,6 +313,7 @@ bool Game::Tick()
 		break;
 	}
 	
+	m_cam->SetPos(Vector3(getcamerax(), getcameray(), getcameraz()));
 	return true;
 };
 
@@ -336,6 +343,21 @@ void Game::PlayTick()
 	}
 }
 
+float * Game::get_camera_x()
+{
+	return &camera_x;
+}
+
+float * Game::get_camera_y()
+{
+	return &camera_y;
+}
+
+float * Game::get_camera_z()
+{
+	return &camera_z;
+}
+
 void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext) 
 {
 	//set immediate context of the graphics device
@@ -343,10 +365,6 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//set which camera to be used
 	m_DD->m_cam = m_cam;
-	if (m_GD->m_GS == GS_PLAY_TPS_CAM)
-	{
-		m_DD->m_cam = m_TPScam;
-	}
 
 	//update the constant buffer for the rendering of VBGOs
 	VBGO::UpdateConstantBuffer(m_DD);
