@@ -182,7 +182,7 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 
 	/* Boid Manager Creation: Number of boids, number of predators,
 	   number of alpha predators, number of objects, VBO size*/
-	BoidManager* pBoidManager = new BoidManager(500, 5, 1, 2, 3, _pd3dDevice);
+	BoidManager* pBoidManager = new BoidManager(1250, 5, 1, 2, 3, _pd3dDevice);
 	m_GameObjects.push_back(pBoidManager);
 
 
@@ -195,9 +195,6 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(tweakBar, "Prey Cohesion Modifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Cohesion Modifier'");
 	TwAddVarRW(tweakBar, "Prey Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Separation Modifier'");
 	TwAddVarRW(tweakBar, "Prey Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_mod(), "min=1 max=100000 step=0.5 group=Prey label='Alignment Modifier'");
-	TwAddVarRW(tweakBar, "Prey Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_radius(), "min=1 max=100 step=0.5 group=Prey label='Cohesion Radius'");
-	TwAddVarRW(tweakBar, "Prey Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_radius(), "min=0 max=100 step=0.5 group=Prey label='Separation Radius'");
-	TwAddVarRW(tweakBar, "Prey Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_radius(), "min=0 max=100 step=0.5 group=Prey label='Alignment Radius'");
 	TwAddVarRW(tweakBar, "Prey Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_prey_speed_limit(), "min=0 max=100 step=1 group=Prey label='Speed Limit'");
 	TwAddVarRW(tweakBar, "Prey Scatter Modifier", TW_TYPE_FLOAT, pBoidManager->get_scatter_mod(), "min=1 max=100000 step=0.5 group=Prey label='Scatter Modifier'");
 	TwAddVarRW(tweakBar, "Prey Scatter Radius", TW_TYPE_FLOAT, pBoidManager->get_scatter_radius(), "min=0 max=100 step=0.5 group=Prey label='Scatter Radius'");
@@ -206,16 +203,16 @@ Game::Game(ID3D11Device* _pd3dDevice, HWND _hWnd, HINSTANCE _hInstance)
 	TwAddVarRW(tweakBar, "Predator Cohesion aModifier", TW_TYPE_FLOAT, pBoidManager->get_cohesion_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Cohesion Modifier'");
 	TwAddVarRW(tweakBar, "Predator Separation Modifier", TW_TYPE_FLOAT, pBoidManager->get_separation_pred_mod(), "min=1 max=100000 step=0.5 group=Predators label='Separation Modifier'");
 	TwAddVarRW(tweakBar, "Predator Alignment Modifier", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_mod(), "min=0 max=100000 step=0.1 group=Predators label='Alignment Modifier'");
-	TwAddVarRW(tweakBar, "Predator Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_pred_radius(), "min=1 max=100 step=0.5 group=Predators label='Cohesion Radius'");
-	TwAddVarRW(tweakBar, "Predator Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Separation Radius'");
-	TwAddVarRW(tweakBar, "Predator Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_pred_radius(), "min=0 max=100 step=0.5 group=Predators label='Alignment Radius'");
 	TwAddVarRW(tweakBar, "Predator Speed Limit", TW_TYPE_FLOAT, pBoidManager->get_pred_speed_limit(), "min=0 max=100 step=1 group=Predators label='Speed Limit'");
 
-	TwAddVarRW(tweakBar, "Dimension", TW_TYPE_FLOAT, pBoidManager->setD(), "min=0 max=1 step=1 group=Dimensions label='setd'");
+	TwAddVarRW(tweakBar, "Prey Cohesion Radius", TW_TYPE_FLOAT, pBoidManager->get_cohesion_prey_radius(), "min=1 max=100 step=0.5 group=Radii label='Cohesion Radius'");
+	TwAddVarRW(tweakBar, "Prey Separation Radius", TW_TYPE_FLOAT, pBoidManager->get_separation_prey_radius(), "min=0 max=100 step=0.5 group=Radii label='Separation Radius'");
+	TwAddVarRW(tweakBar, "Prey Alignment Radius", TW_TYPE_FLOAT, pBoidManager->get_alignment_prey_radius(), "min=0 max=100 step=0.5 group=Radii label='Alignment Radius'");
 
-	TwAddVarRW(tweakBar, "CameraVariablex", TW_TYPE_FLOAT, get_camera_x(), "min=0 max= 1000 step=10 group=Camerax label='Camera Angle'");
-	TwAddVarRW(tweakBar, "CameraVariabley", TW_TYPE_FLOAT, get_camera_y(), "min=0 max= 1000 step=10 group=Cameray label='Camera Angle'");
-	TwAddVarRW(tweakBar, "CameraVariablez", TW_TYPE_FLOAT, get_camera_z(), "min=0 max= 1000 step=10 group=Cameraz label='Camera Angle'");
+	TwAddVarRW(tweakBar, "Dimension", TW_TYPE_FLOAT, pBoidManager->setD(), "min=0 max=1 step=1 group=Camera label='2D/3D'");
+	TwAddVarRW(tweakBar, "CameraVariablex", TW_TYPE_FLOAT, get_camera_x(), "min=0 max= 1000 step=10 group=Camera label='Camera Angle X'");
+	TwAddVarRW(tweakBar, "CameraVariabley", TW_TYPE_FLOAT, get_camera_y(), "min=0 max= 1000 step=10 group=Camera label='Camera Angle Y'");
+	TwAddVarRW(tweakBar, "CameraVariablez", TW_TYPE_FLOAT, get_camera_z(), "min=0 max= 1000 step=10 group=Camera label='Camera Angle Z'");
 };
 
 
@@ -368,7 +365,7 @@ void Game::Draw(ID3D11DeviceContext* _pd3dImmediateContext)
 
 	//update the constant buffer for the rendering of VBGOs
 	VBGO::UpdateConstantBuffer(m_DD);
-
+	
 	//draw all objects
 	for (list<GameObject *>::iterator it = m_GameObjects.begin(); it != m_GameObjects.end(); it++)
 	{

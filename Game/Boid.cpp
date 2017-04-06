@@ -22,19 +22,10 @@ Boid::Boid(int _size, ID3D11Device * _pd3dDevice) : VBGO()
 		indices[i] = i;
 		m_vertices[i].texCoord = Vector2::One;
 	}
-	Color boid_color;
-	switch (m_boid_type)
-	{
-	case BoidType::PREY:
-		boid_color = Color(0.1f, 0.1f, 0.1f, 9.0f);
-		break;
-	case BoidType::PREDATOR:
-		boid_color = Color(0.45f, 0.45f, 0.45f, 5.0f);
-		break;
-	case BoidType::ALPHA_PREDATOR:
-		boid_color = Color(0.9f, 0.9f, 0.9f, 2.0f);
-		break;
-	}
+
+
+
+	Color boid_color = Color(0.2f, 0.2f, 0.9f, 1.0f);
 
 	//top
 	m_vertices[0].Color = boid_color;

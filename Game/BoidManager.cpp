@@ -22,7 +22,7 @@ BoidManager::BoidManager(int _boid_count, int _predator_count,
 
 	if (alpha_predator_count > _boid_count)
 	{
-		predator_count = (_boid_count / 90) + 1;
+		alpha_predator_count = (_boid_count / 90) + 1;
 	}
 
 
@@ -41,7 +41,7 @@ BoidManager::BoidManager(int _boid_count, int _predator_count,
 	for (int i = 0; i < object_count; i++)
 	{
 		m_Boids[i]->setBoidType(BoidType::OBJECT);
-		m_Boids[i]->SetScale(9.0f);
+		m_Boids[i]->SetScale(90.0f);
 	}
 }
 
